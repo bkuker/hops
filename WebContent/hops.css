@@ -1,0 +1,81 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400);
+
+html,body {
+	height: 100%;
+}
+
+/*Header Font*/
+h1,h2 {
+	font-family: 'Roboto', sans-serif !important;
+	font-weight: 300 !important;
+}
+
+h3,h4 {
+	font-family: 'Roboto', sans-serif !important;
+	font-weight: 300 !important;
+}
+
+h1 {
+	text-align: center;
+}
+
+#barchart {
+	width: 100%;
+	height: 1500px;
+	margin: 0;
+}
+
+.sort>div {
+	padding: 3px 10px;
+	border-radius: 10px;
+	margin-bottom: 2px;
+	cursor: pointer;
+}
+
+.sort>div>h3 {
+	margin: 2px;
+}
+
+#alphaAcid {
+	color: #CAC7D2;
+}
+
+#myrcene {
+	color: #CFD8AD;
+}
+
+#humulene {
+	color: #CD8F78;
+}
+
+#variety, #origin {
+	color: #ccc;
+}
+
+#caryophyllene {
+	color: #E8CD7C;
+}
+
+.sort .selected {
+	color: #000 !important;
+}
+
+#alphaAcid.selected {
+	background-color: #CAC7D2;
+}
+
+#myrcene.selected {
+	background-color: #CFD8AD;
+}
+
+#humulene.selected {
+	background-color: #CD8F78;
+}
+
+#caryophyllene.selected {
+	background-color: #E8CD7C;
+}
+
+#variety.selected, #origin.selected {
+	background-color: #ccc;
+}

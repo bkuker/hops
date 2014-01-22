@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hops</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="hops.css">
+</head>
+<body>
+
+
+	<div class="container">
+		<div class="row">
+			<div class='col-md-12'>
+				<h1>Hops Bitterness, Flavor &amp; Aroma</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class='sort col-md-2'>
+				<div id='alphaAcid' class='selected'>
+					<h3>Alpha Acid</h3>
+				</div>
+				<div id='myrcene'>
+					<h3>Myrcene</h3>
+				</div>
+				<div id='humulene'>
+					<h3>Humulene</h3>
+				</div>
+				<div id='caryophyllene'>
+					<h3>Caryophyllene</h3>
+				</div>
+				<div id='variety'>
+					<h3>Variety</h3>
+				</div>
+				<div id='origin'>
+					<h3>Origin</h3>
+				</div>
+			</div>
+			<div class='col-md-10'>
+				<div id="barchart"></div>
+			</div>
+		</div>
+	</div>
+
+
+	<script src="//code.jquery.com/jquery.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<script src='//code.highcharts.com/highcharts.js'></script>
+	<script src='//code.highcharts.com/highcharts-more.js'></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+	<script src='hops.js'></script>
+	<script
+		src='https://spreadsheets.google.com/feeds/list/0AiB2MzDCis1adDNYUjRYWnprTjR2b0ZCQ2NVd0gyb2c/1/public/values?alt=json-in-script&callback=hopsLoaded'></script>
+</body>
+</html>
