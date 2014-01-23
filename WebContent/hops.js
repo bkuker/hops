@@ -1,7 +1,35 @@
 (function() {
-	var hops = null;
+	var hops = [];
 	var animate = true;
 
+	// Data Loading
+	$.get("data.csv").then(function(data) {
+		var lines = data.match(/[^\r\n]+/g);
+		var labels = lines.shift().split(",");
+		_.each(lines, function(line) {
+			var ll = line.split(",");
+			var hop = {};
+			for (var i = 0; i < ll.length; i++) {
+				var k = labels[i];
+				var v = ll[i];
+				if (v.indexOf("-") > 0) {
+					var s = v.split("-");
+					v = {
+						min : parseFloat(s[0]),
+						max : parseFloat(s[1])
+					};
+					v.avg = (v.min + v.max) / 2;
+					v.r = v.max - v.min;
+				}
+				hop[k] = v;
+			}
+			hop.variety = hop.variety + " " + hop.origin;
+			hops.push(hop);
+		});
+		$sort.trigger("sort");
+	});
+
+	// Sorting
 	var $sort = $("div.sort");
 	$("div.sort > div").click(function(e) {
 		if ($(e.currentTarget).hasClass("selected")) {
@@ -12,11 +40,6 @@
 			$sort.trigger("sort");
 		}
 	});
-
-	window.hopsLoaded = function(data) {
-		hops = transformData(data);
-		$sort.trigger("sort");
-	};
 
 	$sort.on("sort", function() {
 		var sortFunc = {
@@ -49,35 +72,7 @@
 		draw(hops);
 	});
 
-	function transformData(data) {
-		var hops = [];
-		for (var i = 0; i < data.feed.entry.length; i++) {
-			var entry = data.feed.entry[i];
-			var hop = {};
-			_.each(entry, function(v, k) {
-				if (k.indexOf("gsx$") === 0) {
-					k = k.replace("gsx$", "");
-					v = v["$t"];
-					if (v.indexOf("-") > 0) {
-						var s = v.split("-");
-						if (s.length == 2 && k != "commments") {
-							v = {
-								min : parseFloat(s[0]),
-								max : parseFloat(s[1])
-							};
-							v.avg = (v.min + v.max) / 2;
-							v.r = v.max - v.min;
-						}
-					}
-					hop[k] = v;
-				}
-			});
-			hop.variety = hop.variety + " " + hop.origin;
-			hops.push(hop);
-		}
-		return hops;
-	}
-
+	// Graph Drawing
 	function yfmt() {
 		var v = this.value;
 		if (v <= 0)
@@ -86,7 +81,6 @@
 	}
 
 	function draw(hops) {
-		var categories = _.pluck(hops, 'variety');
 		var options = {
 			title : false,
 			legend : false,
@@ -98,7 +92,7 @@
 				type : 'bar'
 			},
 			xAxis : [ {
-				categories : categories,
+				categories : _.pluck(hops, 'variety'),
 				reversed : false,
 				labels : {
 					step : 1
@@ -131,9 +125,7 @@
 			},
 
 			colors : [ "#EBE9EA", "#D7D5DA", "#CAC7D2", "#DCE0E3", "#E8CD7C",
-					"#CD8F78", "#CFD8AD"
-
-			]
+					"#CD8F78", "#CFD8AD" ]
 		};
 		options.series = [
 				{
