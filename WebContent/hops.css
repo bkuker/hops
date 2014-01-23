@@ -8,6 +8,7 @@ html,body {
 h1,h2 {
 	font-family: 'Roboto', sans-serif !important;
 	font-weight: 300 !important;
+	color: #666;
 }
 
 h3,h4 {
@@ -21,8 +22,14 @@ h1 {
 
 #barchart {
 	width: 100%;
-	height: 1500px;
+	height: 1600px;
 	margin: 0;
+}
+
+@media print {
+	.sort {
+		display: none;
+	}
 }
 
 .sort>div {
@@ -57,7 +64,7 @@ h1 {
 }
 
 .sort .selected {
-	color: #000 !important;
+	color: #666 !important;
 }
 
 #alphaAcid.selected {

@@ -2,11 +2,15 @@
 	var hops = null;
 	var animate = true;
 
-	$sort = $("div.sort");
+	var $sort = $("div.sort");
 	$("div.sort > div").click(function(e) {
-		$("div.sort > div.selected").removeClass("selected");
-		$(e.currentTarget).addClass("selected");
-		$sort.trigger("sort");
+		if ($(e.currentTarget).hasClass("selected")) {
+			$sort.trigger("reverse");
+		} else {
+			$("div.sort > div.selected").removeClass("selected");
+			$(e.currentTarget).addClass("selected");
+			$sort.trigger("sort");
+		}
 	});
 
 	window.hopsLoaded = function(data) {
@@ -35,31 +39,26 @@
 				return hop.origin;
 			}
 		};
-		order = $("div.sort > div.selected").attr("id");
-		draw(_.sortBy(hops, sortFunc[order]));
+		var order = $("div.sort > div.selected").attr("id");
+		hops = _.sortBy(hops, sortFunc[order]);
+		draw(hops);
+	});
+
+	$sort.on("reverse", function() {
+		hops = hops.reverse();
+		draw(hops);
 	});
 
 	function transformData(data) {
 		var hops = [];
-		 for (var i = 0; i < data.feed.entry.length; i++) {
-		//for (var i = 0; i < 20; i++) {
-			entry = data.feed.entry[i];
+		for (var i = 0; i < data.feed.entry.length; i++) {
+			var entry = data.feed.entry[i];
 			var hop = {};
 			_.each(entry, function(v, k) {
 				if (k.indexOf("gsx$") === 0) {
 					k = k.replace("gsx$", "");
 					v = v["$t"];
-					if (v.indexOf("–") > 0) {
-						var s = v.split("–");
-						if (s.length == 2 && k != "commments") {
-							v = {
-								min : parseFloat(s[0]),
-								max : parseFloat(s[1])
-							};
-							v.avg = (v.min + v.max) / 2;
-							v.r = v.max - v.min;
-						}
-					} else if (v.indexOf("-") > 0) {
+					if (v.indexOf("-") > 0) {
 						var s = v.split("-");
 						if (s.length == 2 && k != "commments") {
 							v = {
@@ -79,13 +78,19 @@
 		return hops;
 	}
 
+	function yfmt() {
+		var v = this.value;
+		if (v <= 0)
+			return -v + "%";
+		return (v / 10) + "%";
+	}
+
 	function draw(hops) {
 		var categories = _.pluck(hops, 'variety');
-		console.log(categories);
 		var options = {
 			title : false,
 			legend : false,
-			tooltip: false,
+			tooltip : false,
 			credits : {
 				enabled : false
 			},
@@ -100,31 +105,17 @@
 				}
 			} ],
 			yAxis : [ {
-				title : {
-					text : null
-				},
+				title : false,
 				labels : {
-					formatter : function() {
-						var v = this.value;
-						if (v <= 0)
-							return -v + "%";
-						return (v / 10) + "%";
-					}
+					formatter : yfmt
 				},
 				min : -20,
 				max : 30
 			}, {
 				opposite : true,
-				title : {
-					text : null
-				},
+				title : false,
 				labels : {
-					formatter : function() {
-						var v = this.value;
-						if (v <= 0)
-							return -v + "%";
-						return (v / 10) + "%";
-					}
+					formatter : yfmt
 				},
 				min : -20,
 				max : 30
@@ -196,7 +187,7 @@
 								* hop.totaloilmls100gms.avg * 10;
 					})
 				} ];
-		if ( !animate )
+		if (!animate)
 			options.plotOptions.bar.animation = false;
 		$('#barchart').highcharts(options);
 		animate = false;
